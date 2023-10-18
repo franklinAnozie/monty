@@ -23,12 +23,9 @@ void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 	while (opcodes[counter].opcode != NULL)
 	{
 		if (strcmp(opcodes[counter].opcode, opcode) == 0)
-		{
 			return (opcodes[counter].f);
-		}
 		counter++;
 	}
-
 	return (NULL);
 }
 
@@ -45,9 +42,7 @@ void push(stack_t **stack, unsigned int line_number)
 
 	new_node = malloc(sizeof(stack_t));
 	if (new_node == NULL)
-	{
 		exit(EXIT_FAILURE);
-	}
 	if (global.temp != NULL)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
@@ -82,7 +77,7 @@ void pall(stack_t **stack, unsigned int line_number)
 
 	while (traverse != NULL)
 	{
-		printf("%d\n", traverse->n);
+		fprintf(stdout, "%d\n", traverse->n);
 		traverse = traverse->next;
 	}
 }
@@ -99,15 +94,12 @@ void pint(stack_t **stack, unsigned int line_number)
 {
 	stack_t *traverse = *stack;
 
-	if (stack == NULL || *stack == NULL)
+	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number),
 		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		printf("%d\n", traverse->n);
-	}
+	fprintf(stdout, "%d\n", traverse->n);
 }
 
 /**
@@ -127,11 +119,8 @@ void pop(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number),
 		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		temp = *stack;
-		*stack = temp->next;
-		(*stack)->prev = NULL;
-		free(temp);
-	}
+	temp = *stack;
+	*stack = temp->next;
+	(*stack)->prev = NULL;
+	free(temp);
 }

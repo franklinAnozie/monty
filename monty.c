@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 		process_start(&global);
 		fclose(global.file);
 		retval = EXIT_SUCCESS;
+		free_node(global.head);
 	}
-	free_node(global.head);
 	return (retval);
 }
 
@@ -89,5 +89,4 @@ void free_node(stack_t *stack)
 		stack = stack->next;
 		free(traverse);
 	}
-	free(stack);
 }
