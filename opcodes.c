@@ -1,5 +1,11 @@
 #include "monty.h"
 
+/**
+ * get_opcodes - function that selects the correct function to perform
+ * @opcode: opcode to be evaluated
+ * Return: pointer to the function that corresponds to the opcode
+ */
+
 void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 {
 	instruction_t opcodes[] = {
@@ -26,6 +32,13 @@ void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 	return (NULL);
 }
 
+/**
+ * push - pushes an element to the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: pushes an element to the stack
+*/
 void push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new_node;
@@ -33,15 +46,14 @@ void push(stack_t **stack, unsigned int line_number)
 	new_node = malloc(sizeof(stack_t));
 	if (new_node == NULL)
 	{
-		free(new_node);
 		exit(EXIT_FAILURE);
 	}
-	if (temp != NULL)
+	if (global.temp != NULL)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	new_node->n = num;
+	new_node->n = global.num;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 
@@ -55,6 +67,14 @@ void push(stack_t **stack, unsigned int line_number)
 	}
 }
 
+/**
+ * pall - prints all the values on the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: prints all the values on the stack
+*/
+
 void pall(stack_t **stack, unsigned int line_number)
 {
 	stack_t *traverse = *stack;
@@ -66,6 +86,14 @@ void pall(stack_t **stack, unsigned int line_number)
 		traverse = traverse->next;
 	}
 }
+
+/**
+ * pint - prints the value at the top of the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: prints the value at the top of the stack
+*/
 
 void pint(stack_t **stack, unsigned int line_number)
 {
@@ -81,6 +109,14 @@ void pint(stack_t **stack, unsigned int line_number)
 		printf("%d\n", traverse->n);
 	}
 }
+
+/**
+ * pop - removes the top element of the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: removes the top element of the stack
+*/
 
 void pop(stack_t **stack, unsigned int line_number)
 {

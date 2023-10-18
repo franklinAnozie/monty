@@ -42,10 +42,35 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+/**
+ * struct global_s - global variables
+ * @num: integer
+ * @head: pointer to the top of the stack
+ * @temp: pointer to the string
+ * @ch: character
+ * @file: pointer to the file
+ * @str: pointer to the string
+ * @delim: pointer to the string
+ * @operand: pointer to the string
+ * @ln: unsigned integer
+ * Description: global variables
+ * for stack, queues, LIFO, FIFO
+*/
+typedef struct global_s
+{
+	int num;
+	char ch[1000];
+	FILE *file;
+	char *str;
+	char *delim;
+	char *operand;
+	unsigned int ln;
+	stack_t *head;
+	char *temp;
+} global_t;
+
 /* Global variables */
-extern stack_t *head;
-extern int num;
-extern char *temp;
+extern global_t global;
 
 /* Prototypes */
 void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number);
@@ -56,5 +81,7 @@ void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
 void add(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
+void process_start(global_t *gl);
+void free_node(stack_t *stack);
 
 #endif /* _MONTY_H_ */

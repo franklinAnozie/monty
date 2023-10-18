@@ -1,5 +1,13 @@
 #include "monty.h"
 
+/**
+ * swap - swaps the top two elements of the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: swaps the top two elements of the stack
+*/
+
 void swap(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp, *next;
@@ -21,6 +29,14 @@ void swap(stack_t **stack, unsigned int line_number)
 		*stack = next;
 	}
 }
+
+/**
+ * add - adds the top two elements of the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: adds the top two elements of the stack
+*/
 
 void add(stack_t **stack, unsigned int line_number)
 {
@@ -56,6 +72,14 @@ void add(stack_t **stack, unsigned int line_number)
 		free(temp->prev);
 	}
 }
+
+/**
+ * nop - does nothing
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: does nothing
+*/
 
 void nop(stack_t **stack, unsigned int line_number)
 {
