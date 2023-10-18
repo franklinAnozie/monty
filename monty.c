@@ -7,19 +7,20 @@
  * Return: 0 on success
  */
 
+int num;
+stack_t *head = NULL;
+char *temp = NULL;
+
 int main(int argc, char *argv[])
 {
 	int retval = EXIT_FAILURE;
-	stack_t *head = NULL;
-	char *str = NULL, *delim = " \n";
-	char *str_update[2];
-	int i = 0, n;
+	char *str = NULL, *delim = " \n", *operand, ch[1000];
 	unsigned int ln = 1;
 
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		exit (retval);
+		exit(retval);
 	}
 	else
 	{
@@ -28,37 +29,35 @@ int main(int argc, char *argv[])
 		if (file == NULL)
 		{
 			fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-			exit (retval);
+			exit(retval);
 		}
-
-		char ch[1000];
-
 		while (fgets(ch, 1000, file) != NULL)
 		{
 			str = strtok(ch, delim);
-			while (str != NULL)
+			if (str == NULL || strcmp(str, " ") == 0 || strlen(str) == 1)
+				continue;
+			operand = strtok(NULL, delim);
+			if (operand == NULL || strcmp(operand, " ") == 0)
 			{
-				if (strcmp(str, " ") == 0)
-					break;
+				temp = NULL;
+				num = 0;
+			}
+			else
+			{
+				if (atoi(operand) != 0 || strcmp(operand, "0") == 0)
+					num = atoi(operand);
 				else
 				{
-					if (i >= 2)
-					{
-						i = 0;
-						break;
-					}
-					strcpy(str_update[i], str);
-					str = strtok(NULL, delim);
-					i++;
+					num = 0;
+					temp = operand;
 				}
 			}
-			i = 0;
-			if (atoi(str_update[1]) != 0 || strcmp(str_update[1], "0") == 0)
-				n = atoi(str_update[1]);
-			get_opcodes(str_update[0])(&head, ln);
+			get_opcodes(str)(&head, ln);
+			temp = NULL;
 			ln++;
 		}
 		fclose(file);
+		(void)num;
 		retval = EXIT_SUCCESS;
 	}
 	return (retval);
