@@ -40,26 +40,21 @@ void push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *new_node;
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
-		exit(EXIT_FAILURE);
 	if (global.temp != NULL)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_number);
 		exit(EXIT_FAILURE);
 	}
+	new_node = malloc(sizeof(stack_t));
+	if (new_node == NULL)
+		exit(EXIT_FAILURE);
 	new_node->n = global.num;
-	new_node->next = NULL;
+	new_node->next = *stack;
 	new_node->prev = NULL;
 
-	if (*stack == NULL)
-		*stack = new_node;
-	else
-	{
-		new_node->next = *stack;
+	if (*stack != NULL)
 		(*stack)->prev = new_node;
-		*stack = new_node;
-	}
+	*stack = new_node;
 }
 
 /**
@@ -77,7 +72,7 @@ void pall(stack_t **stack, unsigned int line_number)
 
 	while (traverse != NULL)
 	{
-		fprintf(stdout, "%d\n", traverse->n);
+		printf("%d\n", traverse->n);
 		traverse = traverse->next;
 	}
 }
@@ -96,10 +91,10 @@ void pint(stack_t **stack, unsigned int line_number)
 
 	if (*stack == NULL)
 	{
-		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number),
+		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	fprintf(stdout, "%d\n", traverse->n);
+	printf("%d\n", traverse->n);
 }
 
 /**
@@ -116,11 +111,12 @@ void pop(stack_t **stack, unsigned int line_number)
 
 	if (*stack == NULL)
 	{
-		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number),
+		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	temp = *stack;
 	*stack = temp->next;
-	(*stack)->prev = NULL;
+	if (*stack != NULL)
+		(*stack)->prev = NULL;
 	free(temp);
 }

@@ -18,12 +18,12 @@ void swap(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	temp  = *stack;
-	next = (*stack)->next;
-	next->next->prev = temp;
-	temp->next = temp->next->next;
-	temp->prev = next;
+	next = temp->next;
+	temp->next = next->next;
 	next->next = temp;
+	temp->prev = next;
 	next->prev = NULL;
+	next->next = temp;
 	*stack = next;
 }
 
@@ -45,29 +45,22 @@ void add(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't add, stack too short\n", line_number),
 		exit(EXIT_FAILURE);
 	}
-	else
+	temp  = *stack;
+	while (temp->next != NULL)
 	{
-		temp  = *stack;
-		while (temp->next != NULL)
-		{
-			count++;
-			temp = temp->next;
-		}
-		if (count < 2)
-		{
-			fprintf(stderr, "L%d: can't add, stack too short\n", line_number),
-			exit(EXIT_FAILURE);
-		}
-		while (temp->prev->prev != NULL)
-		{
-			temp = temp->prev;
-		}
-		sum = temp->n + temp->prev->n;
-		temp->n = sum;
-		temp->prev = NULL;
-		free(temp->prev);
-		*stack = temp;
+		count++;
+		temp = temp->next;
 	}
+	if (count < 1)
+	{
+		fprintf(stderr, "L%d: can't add, stack too short\n", line_number),
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	sum = temp->n + temp->next->n;
+	temp->next->n = sum;
+	*stack = temp->next;
+	free(temp);
 }
 
 /**
