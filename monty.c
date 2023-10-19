@@ -49,7 +49,7 @@ void process_start(global_t *gl)
 	while (fgets(gl->ch, 1000, gl->file) != NULL)
 	{
 		gl->str = strtok(gl->ch, gl->delim);
-		if (gl->str == NULL || strcmp(gl->str, " ") == 0 || strlen(gl->str) == 1)
+		if (gl->str == NULL || strcmp(gl->str, " ") == 0 || strlen(gl->str) == 1 || gl->str[0] == '#')
 			continue;
 		gl->operand = strtok(NULL, gl->delim);
 		if (gl->operand == NULL || strcmp(gl->operand, " ") == 0)
