@@ -15,7 +15,7 @@ void mul(stack_t **stack, unsigned int line_number)
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't mul, stack too short\n", line_number),
+		fprintf(stderr, "L%d: can't mul, stack too short\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	temp = *stack;
@@ -40,13 +40,13 @@ void mod(stack_t **stack, unsigned int line_number)
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
-		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number),
+		fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	temp = *stack;
 	if (temp->n == 0)
 	{
-		fprintf(stderr, "L%d: division by zero\n", line_number),
+		fprintf(stderr, "L%d: division by zero\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	mod = temp->next->n % temp->n;
@@ -65,19 +65,17 @@ void mod(stack_t **stack, unsigned int line_number)
 
 void pchar(stack_t **stack, unsigned int line_number)
 {
-	stack_t *temp;
 	int ascii = 0;
 
 	if (*stack == NULL)
 	{
-		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_number),
+		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	temp = *stack;
-	ascii = temp->n;
+	ascii = (*stack)->n;
 	if (ascii < 0 || ascii > 127)
 	{
-		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number),
+		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	printf("%c\n", ascii);
