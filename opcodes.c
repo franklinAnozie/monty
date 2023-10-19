@@ -63,27 +63,30 @@ void push(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	new_node->n = global.num;
-	new_node->next = *stack;
+	new_node->next = NULL;
 	new_node->prev = NULL;
 
 	if (global.choice == 0)
 	{
+		new_node->next = *stack;
 		if (*stack != NULL)
 			(*stack)->prev = new_node;
 		*stack = new_node;
 	}
 	else
 	{
-		if (*stack == NULL)
+		if (*stack != NULL)
+		{
+			temp = *stack;
+			while (temp->next != NULL)
+				temp = temp->next;
+			temp->next = new_node;
+			new_node->prev = temp;
+		}
+		else
 		{
 			*stack = new_node;
-			return;
 		}
-		temp = *stack;
-		while (temp->prev != NULL)
-			temp = temp->prev;
-		temp->prev = new_node;
-		new_node->next = temp;
 	}
 }
 
@@ -100,23 +103,10 @@ void pall(stack_t **stack, unsigned int line_number)
 	stack_t *traverse = *stack;
 	(void)line_number;
 
-	if (global.choice == 0)
+	while (traverse != NULL)
 	{
-		while (traverse != NULL)
-		{
-			printf("%d\n", traverse->n);
-			traverse = traverse->next;
-		}
-	}
-	else
-	{
-		while (traverse->prev != NULL)
-			traverse = traverse->prev;
-		while (traverse != NULL)
-		{
-			printf("%d\n", traverse->n);
-			traverse = traverse->next;
-		}
+		printf("%d\n", traverse->n);
+		traverse = traverse->next;
 	}
 }
 
