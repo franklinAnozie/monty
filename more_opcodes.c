@@ -38,7 +38,7 @@ void swap(stack_t **stack, unsigned int line_number)
 void add(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int sum = 0, count = 0;
+	int sum = 0;
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
@@ -77,7 +77,7 @@ void nop(stack_t **stack, unsigned int line_number)
 void sub(stack_t **stack, unsigned int line_number)
 {
 	stack_t *temp;
-	int diff = 0, count = 0;
+	int diff = 0;
 
 	if (*stack == NULL || (*stack)->next == NULL)
 	{
