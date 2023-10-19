@@ -90,3 +90,33 @@ void sub(stack_t **stack, unsigned int line_number)
 	*stack = temp->next;
 	free(temp);
 }
+
+/**
+ * div - divides the top two elements of the stack
+ * @stack: pointer to the top of the stack
+ * @line_number: line number of the opcode
+ * Return: void
+ * Description: divides the top two elements of the stack
+*/
+
+void _div(stack_t **stack, unsigned int line_number)
+{
+	stack_t *temp;
+	int div = 0;
+
+	if (*stack == NULL || (*stack)->next == NULL)
+	{
+		fprintf(stderr, "L%d: can't div, stack too short\n", line_number),
+		exit(EXIT_FAILURE);
+	}
+	temp = *stack;
+	if (temp->n == 0)
+	{
+		fprintf(stderr, "L%d: division by zero\n", line_number),
+		exit(EXIT_FAILURE);
+	}
+	div = temp->next->n / temp->n;
+	temp->next->n = div;
+	*stack = temp->next;
+	free(temp);
+}

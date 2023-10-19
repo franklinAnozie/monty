@@ -17,6 +17,15 @@ void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 		{"add", add},
 		{"nop", nop},
 		{"sub", sub},
+		{"div", _div},
+		{"mul", mul},
+		{"mod", mod},
+		{"pchar", pchar},
+		{"pstr", pstr},
+		{"rotl", rotl},
+		{"rotr", rotr},
+		{"stack", stack},
+		{"queue", queue},
 		{NULL, NULL}
 	};
 	int counter = 0;
@@ -40,7 +49,7 @@ void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 */
 void push(stack_t **stack, unsigned int line_number)
 {
-	stack_t *new_node;
+	stack_t *new_node, *temp;
 
 	if (global.temp != NULL)
 	{
@@ -57,9 +66,25 @@ void push(stack_t **stack, unsigned int line_number)
 	new_node->next = *stack;
 	new_node->prev = NULL;
 
-	if (*stack != NULL)
-		(*stack)->prev = new_node;
-	*stack = new_node;
+	if (global.choice == 0)
+	{
+		if (*stack != NULL)
+			(*stack)->prev = new_node;
+		*stack = new_node;
+	}
+	else
+	{
+		if (*stack == NULL)
+		{
+			*stack = new_node;
+			return;
+		}
+		temp = *stack;
+		while (temp->prev != NULL)
+			temp = temp->prev;
+		temp->prev = new_node;
+		new_node->next = temp;
+	}
 }
 
 /**
@@ -75,10 +100,23 @@ void pall(stack_t **stack, unsigned int line_number)
 	stack_t *traverse = *stack;
 	(void)line_number;
 
-	while (traverse != NULL)
+	if (global.choice == 0)
 	{
-		printf("%d\n", traverse->n);
-		traverse = traverse->next;
+		while (traverse != NULL)
+		{
+			printf("%d\n", traverse->n);
+			traverse = traverse->next;
+		}
+	}
+	else
+	{
+		while (traverse->prev != NULL)
+			traverse = traverse->prev;
+		while (traverse != NULL)
+		{
+			printf("%d\n", traverse->n);
+			traverse = traverse->next;
+		}
 	}
 }
 
@@ -99,7 +137,16 @@ void pint(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	printf("%d\n", traverse->n);
+	if (global.choice == 0)
+	{
+		printf("%d\n", traverse->n);
+	}
+	else
+	{
+		while (traverse->prev != NULL)
+			traverse = traverse->prev;
+		printf("%d\n", traverse->n);
+	}
 }
 
 /**
@@ -112,16 +159,25 @@ void pint(stack_t **stack, unsigned int line_number)
 
 void pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *temp;
+	stack_t *temp = *stack;
 
 	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-	temp = *stack;
-	*stack = temp->next;
-	if (*stack != NULL)
-		(*stack)->prev = NULL;
-	free(temp);
+	if (global.choice == 0)
+	{
+		*stack = temp->next;
+		if (*stack != NULL)
+			(*stack)->prev = NULL;
+		free(temp);
+	}
+	else
+	{
+		*stack = temp->prev;
+		if (*stack != NULL)
+			(*stack)->next = NULL;
+		free(temp);
+	}
 }
