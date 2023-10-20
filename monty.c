@@ -58,21 +58,25 @@ void process_start(global_t *gl)
 		gl->operand = strtok(NULL, gl->delim);
 		if (gl->operand == NULL || strcmp(gl->operand, " ") == 0)
 		{
-			fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
-			exit(gl->retval);
+			gl->num = 0;
+			gl->temp = "";
 		}
 		else
 		{
 			checker(gl);
 			if (atoi(gl->operand) != 0 || strcmp(gl->operand, "0") == 0)
 			{
-				if (gl->operand[0] == '-')
-					gl->num = atoi(gl->operand);
+				gl->num = atoi(gl->operand);
 			}
 			else
 			{
-				gl->num = 0;
-				gl->temp = gl->operand;
+				if (gl->operand[0] == '-')
+					gl->num = atoi(gl->operand);
+				else
+				{
+					gl->num = 0;
+					gl->temp = gl->operand;
+				}
 			}
 		}
 		get_opcodes(gl->str)(&gl->head, gl->ln);
