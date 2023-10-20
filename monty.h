@@ -69,6 +69,7 @@ typedef struct global_s
 	char *temp;
 	int choice;
 	int retval;
+	int i;
 } global_t;
 
 /* Global variables */
@@ -93,7 +94,10 @@ void rotl(stack_t **stack, unsigned int line_number);
 void rotr(stack_t **stack, unsigned int line_number);
 void stack(stack_t **stack, unsigned int line_number);
 void queue(stack_t **stack, unsigned int line_number);
+
+/* Helper functions */
 void process_start(global_t *gl);
 void free_node(stack_t *stack);
+void checker(global_t *gl);
 
 #endif /* _MONTY_H_ */

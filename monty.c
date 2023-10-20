@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	global.retval = EXIT_FAILURE;
 	global.str = global.operand = NULL;
 	global.delim = " \n";
-	global.ln = 1;
+	global.ln = 1, global.i = 0;
 
 	if (argc != 2)
 	{
@@ -45,8 +45,6 @@ int main(int argc, char *argv[])
 
 void process_start(global_t *gl)
 {
-	int i = 0;
-
 	while (fgets(gl->ch, 1000, gl->file) != NULL)
 	{
 		gl->str = strtok(gl->ch, gl->delim);
@@ -65,20 +63,12 @@ void process_start(global_t *gl)
 		}
 		else
 		{
-			while (gl->operand[i] != '\0')
+			checker(gl);
+			if (atoi(gl->operand) != 0 || strcmp(gl->operand, "0") == 0)
 			{
-				if (gl->operand[i] == '-' && gl->operand[i + 1] != '\0')
-					i++;
-				if (isdigit(gl->operand[i]) == 0)
-				{
-					fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
-					exit(gl->retval);
-				}
-				i++;
+				if (gl->operand[0] == '-')
+					gl->num = atoi(gl->operand);
 			}
-			i = 0;
-			if (atoi(gl->operand) != 0 || strcmp(gl->operand, "0") == 0 || gl->operand[0] == '-')
-				gl->num = atoi(gl->operand);
 			else
 			{
 				gl->num = 0;
@@ -107,4 +97,26 @@ void free_node(stack_t *stack)
 		stack = stack->next;
 		free(traverse);
 	}
+}
+
+/**
+ * checker - checks if the operand is a number
+ * @gl: global variables
+ * Return: void
+*/
+
+void checker(global_t *gl)
+{
+	while (gl->operand[gl->i] != '\0')
+	{
+		if (gl->operand[gl->i] == '-' && gl->operand[gl->i + 1] != '\0')
+			gl->i++;
+		if (isdigit(gl->operand[gl->i]) == 0)
+		{
+			fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
+			exit(gl->retval);
+		}
+		gl->i++;
+	}
+	gl->i = 0;
 }
