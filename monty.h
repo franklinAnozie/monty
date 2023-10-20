@@ -68,6 +68,7 @@ typedef struct global_s
 	stack_t *head;
 	char *temp;
 	int choice;
+	int retval;
 } global_t;
 
 /* Global variables */

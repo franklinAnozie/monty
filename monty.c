@@ -10,16 +10,15 @@ global_t global;
 
 int main(int argc, char *argv[])
 {
-	int retval = EXIT_FAILURE;
-
-	global.str = NULL;
+	global.retval = EXIT_FAILURE;
+	global.str = global.operand = NULL;
 	global.delim = " \n";
 	global.ln = 1;
 
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		exit(retval);
+		exit(global.retval);
 	}
 	else
 	{
@@ -28,14 +27,14 @@ int main(int argc, char *argv[])
 		if (global.file == NULL)
 		{
 			fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-			exit(retval);
+			exit(global.retval);
 		}
 		process_start(&global);
 		fclose(global.file);
-		retval = EXIT_SUCCESS;
+		global.retval = EXIT_SUCCESS;
 		free_node(global.head);
 	}
-	return (retval);
+	return (global.retval);
 }
 
 /**
@@ -46,22 +45,39 @@ int main(int argc, char *argv[])
 
 void process_start(global_t *gl)
 {
+	int i = 0;
+
 	while (fgets(gl->ch, 1000, gl->file) != NULL)
 	{
 		gl->str = strtok(gl->ch, gl->delim);
 		if (gl->str == NULL || strcmp(gl->str, " ") == 0 || strlen(gl->str) == 1)
+		{
+			gl->ln++;
 			continue;
+		}
 		if (gl->str[0] == '#')
 			continue;
 		gl->operand = strtok(NULL, gl->delim);
 		if (gl->operand == NULL || strcmp(gl->operand, " ") == 0)
 		{
-			gl->temp = NULL;
-			gl->num = 0;
+			fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
+			exit(gl->retval);
 		}
 		else
 		{
-			if (atoi(gl->operand) != 0 || strcmp(gl->operand, "0") == 0)
+			while (gl->operand[i] != '\0')
+			{
+				if (gl->operand[i] == '-' && gl->operand[i + 1] != '\0')
+					i++;
+				if (isdigit(gl->operand[i]) == 0)
+				{
+					fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
+					exit(gl->retval);
+				}
+				i++;
+			}
+			i = 0;
+			if (atoi(gl->operand) != 0 || strcmp(gl->operand, "0") == 0 || gl->operand[0] == '-')
 				gl->num = atoi(gl->operand);
 			else
 			{
@@ -70,7 +86,7 @@ void process_start(global_t *gl)
 			}
 		}
 		get_opcodes(gl->str)(&gl->head, gl->ln);
-		gl->temp = NULL;
+		gl->temp = gl->operand = NULL;
 		gl->ln++;
 	}
 }
