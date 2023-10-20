@@ -117,8 +117,8 @@ void checker(global_t *gl)
 			gl->i++;
 		if (isdigit(gl->operand[gl->i]) == 0)
 		{
-			fprintf(stderr, "L%d: usage: push integer\n", gl->ln);
-			exit(gl->retval);
+			gl->num = 0;
+			gl->temp = "";
 		}
 		gl->i++;
 	}
